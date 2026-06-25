@@ -1,0 +1,25 @@
+const sqlite3 = require('sqlite3').verbose();
+
+const db = new sqlite3.Database('./database.db');
+
+db.serialize(() => {
+    db.run(`
+        CREATE TABLE IF NOT EXISTS produtos (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            nome TEXT,
+            quantidade INTEGER DEFAULT 0
+        )
+    `);
+
+    db.run(`
+        CREATE TABLE IF NOT EXISTS movimentacoes (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            produto_id INTEGER,
+            tipo TEXT,
+            quantidade INTEGER,
+            data DATETIME DEFAULT CURRENT_TIMESTAMP
+        )
+    `);
+});
+
+module.exports = db;
